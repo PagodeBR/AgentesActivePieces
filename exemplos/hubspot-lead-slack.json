@@ -1,0 +1,64 @@
+{
+  "_comentario": "Exemplo: notifica no Slack sempre que um novo contato é criado no HubSpot",
+  "displayName": "Novo Lead HubSpot → Slack",
+  "trigger": {
+    "name": "trigger",
+    "type": "PIECE_TRIGGER",
+    "displayName": "Novo contato no HubSpot",
+    "settings": {
+      "pieceName": "@activepieces/piece-hubspot",
+      "pieceVersion": "~0.3.0",
+      "triggerName": "new_contact",
+      "input": {}
+    },
+    "nextAction": "verificar_origem"
+  },
+  "actions": [
+    {
+      "name": "verificar_origem",
+      "type": "BRANCH",
+      "displayName": "Tem origem de lead?",
+      "settings": {
+        "conditions": [
+          [
+            {
+              "firstValue": "{{trigger.properties.hs_lead_status}}",
+              "operator": "IS_NOT_EMPTY",
+              "secondValue": ""
+            }
+          ]
+        ]
+      },
+      "onSuccessAction": "notificar_slack_completo",
+      "onFailureAction": "notificar_slack_simples"
+    },
+    {
+      "name": "notificar_slack_completo",
+      "type": "PIECE",
+      "displayName": "Notificar Slack (com status)",
+      "settings": {
+        "pieceName": "@activepieces/piece-slack",
+        "pieceVersion": "~0.3.0",
+        "actionName": "send_message_to_channel",
+        "input": {
+          "channel": "#vendas",
+          "text": "Novo lead no HubSpot!\nNome: {{trigger.properties.firstname}} {{trigger.properties.lastname}}\nEmail: {{trigger.properties.email}}\nEmpresa: {{trigger.properties.company}}\nStatus: {{trigger.properties.hs_lead_status}}"
+        }
+      }
+    },
+    {
+      "name": "notificar_slack_simples",
+      "type": "PIECE",
+      "displayName": "Notificar Slack (básico)",
+      "settings": {
+        "pieceName": "@activepieces/piece-slack",
+        "pieceVersion": "~0.3.0",
+        "actionName": "send_message_to_channel",
+        "input": {
+          "channel": "#vendas",
+          "text": "Novo contato no HubSpot!\nNome: {{trigger.properties.firstname}} {{trigger.properties.lastname}}\nEmail: {{trigger.properties.email}}"
+        }
+      }
+    }
+  ]
+}

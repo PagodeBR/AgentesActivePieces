@@ -1,0 +1,66 @@
+{
+  "_comentario": "Exemplo: toda segunda às 9h, busca dados do Google Sheets e envia relatório por email",
+  "displayName": "Relatório Semanal por Email",
+  "trigger": {
+    "name": "trigger",
+    "type": "PIECE_TRIGGER",
+    "displayName": "Todo dia útil às 9h",
+    "settings": {
+      "pieceName": "@activepieces/piece-schedule",
+      "pieceVersion": "~0.1.0",
+      "triggerName": "cron_expression",
+      "input": {
+        "cronExpression": "0 9 * * 1",
+        "timezone": "America/Sao_Paulo"
+      }
+    },
+    "nextAction": "buscar_planilha"
+  },
+  "actions": [
+    {
+      "name": "buscar_planilha",
+      "type": "PIECE",
+      "displayName": "Buscar dados da planilha",
+      "settings": {
+        "pieceName": "@activepieces/piece-google-sheets",
+        "pieceVersion": "~0.4.0",
+        "actionName": "get_rows",
+        "input": {
+          "spreadsheet_id": "SEU_SPREADSHEET_ID",
+          "sheet_name": "Relatório"
+        }
+      },
+      "nextAction": "formatar_dados"
+    },
+    {
+      "name": "formatar_dados",
+      "type": "CODE",
+      "displayName": "Formatar dados para o email",
+      "settings": {
+        "sourceCode": {
+          "code": "export const code = async (inputs) => {\n  const linhas = inputs.rows;\n  const tabela = linhas.map(l => `- ${l[0]}: ${l[1]}`).join('\\n');\n  return { tabela, total: linhas.length };\n}",
+          "packageJson": "{}"
+        },
+        "input": {
+          "rows": "{{buscar_planilha.rows}}"
+        }
+      },
+      "nextAction": "enviar_email"
+    },
+    {
+      "name": "enviar_email",
+      "type": "PIECE",
+      "displayName": "Enviar relatório por email",
+      "settings": {
+        "pieceName": "@activepieces/piece-gmail",
+        "pieceVersion": "~0.3.0",
+        "actionName": "send_email",
+        "input": {
+          "to": "equipe@suaempresa.com",
+          "subject": "Relatório Semanal — {{formatar_dados.total}} registros",
+          "body": "Bom dia!\n\nSegue o relatório da semana:\n\n{{formatar_dados.tabela}}\n\nTotal: {{formatar_dados.total}} registros."
+        }
+      }
+    }
+  ]
+}

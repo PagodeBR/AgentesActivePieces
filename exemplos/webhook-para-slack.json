@@ -1,0 +1,32 @@
+{
+  "_comentario": "Exemplo: recebe um webhook com dados de pedido e notifica no Slack",
+  "displayName": "Notificar Slack ao receber Webhook",
+  "trigger": {
+    "name": "trigger",
+    "type": "PIECE_TRIGGER",
+    "displayName": "Receber Webhook",
+    "settings": {
+      "pieceName": "@activepieces/piece-webhook",
+      "pieceVersion": "~0.1.0",
+      "triggerName": "catch_hook",
+      "input": {}
+    },
+    "nextAction": "notificar_slack"
+  },
+  "actions": [
+    {
+      "name": "notificar_slack",
+      "type": "PIECE",
+      "displayName": "Enviar mensagem no Slack",
+      "settings": {
+        "pieceName": "@activepieces/piece-slack",
+        "pieceVersion": "~0.3.0",
+        "actionName": "send_message_to_channel",
+        "input": {
+          "channel": "#notificacoes",
+          "text": "Novo pedido recebido!\nID: {{trigger.body.pedido_id}}\nCliente: {{trigger.body.cliente}}\nValor: R$ {{trigger.body.valor}}"
+        }
+      }
+    }
+  ]
+}
