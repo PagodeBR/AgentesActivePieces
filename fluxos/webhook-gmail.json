@@ -1,0 +1,35 @@
+{
+  "displayName": "Webhook → Gmail",
+  "trigger": {
+    "name": "trigger",
+    "type": "PIECE_TRIGGER",
+    "displayName": "Receber Webhook",
+    "settings": {
+      "pieceName": "@activepieces/piece-webhook",
+      "pieceVersion": "~0.1.0",
+      "triggerName": "catch_hook",
+      "input": {}
+    },
+    "valid": true,
+    "nextAction": "enviar_email"
+  },
+  "actions": [
+    {
+      "name": "enviar_email",
+      "type": "PIECE",
+      "displayName": "Enviar Email pelo Gmail",
+      "settings": {
+        "pieceName": "@activepieces/piece-gmail",
+        "pieceVersion": "~0.4.0",
+        "actionName": "send_email",
+        "input": {
+          "to": "victor.cassianonau@gmail.com",
+          "subject": "Claude Code",
+          "body": "<p><strong>Nome:</strong> {{trigger.body.nome}}</p><p><strong>Email:</strong> {{trigger.body.email}}</p><p><strong>Mensagem:</strong> {{trigger.body.mensagem}}</p>",
+          "senderName": "ActivePieces"
+        }
+      },
+      "valid": true
+    }
+  ]
+}
