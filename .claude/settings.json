@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "activepieces": {
+      "type": "sse",
+      "url": "${ACTIVEPIECES_MCP_URL}",
+      "description": "MCP Server do ActivePieces — expõe flows publicados como ferramentas e permite interagir com a plataforma"
+    }
+  },
+  "env": {
+    "ACTIVEPIECES_BASE_URL": "https://cloud.activepieces.com",
+    "ACTIVEPIECES_API_KEY": "",
+    "ACTIVEPIECES_MCP_URL": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(jq:*)"
+    ]
+  }
+}
