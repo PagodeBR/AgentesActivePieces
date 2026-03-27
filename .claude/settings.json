@@ -1,15 +1,18 @@
 {
   "mcpServers": {
     "activepieces": {
-      "type": "sse",
-      "url": "${ACTIVEPIECES_MCP_URL}",
+      "type": "http",
+      "url": "https://cloud.activepieces.com/api/v1/projects/wBolfTQgC9sIMOLP6hRE1/mcp-server/http",
+      "headers": {
+        "Authorization": "Bearer HA1Zg3KjqHGFPg6RxHuX5LuzGYg8TKT7Isj9t0VlMBWgrpxV2psnvu5fXYaytkbhwwJBIBjD"
+      },
       "description": "MCP Server do ActivePieces — expõe flows publicados como ferramentas e permite interagir com a plataforma"
     }
   },
   "env": {
     "ACTIVEPIECES_BASE_URL": "https://cloud.activepieces.com",
-    "ACTIVEPIECES_API_KEY": "",
-    "ACTIVEPIECES_MCP_URL": ""
+    "ACTIVEPIECES_API_KEY": "HA1Zg3KjqHGFPg6RxHuX5LuzGYg8TKT7Isj9t0VlMBWgrpxV2psnvu5fXYaytkbhwwJBIBjD",
+    "ACTIVEPIECES_PROJECT_ID": "wBolfTQgC9sIMOLP6hRE1"
   },
   "permissions": {
     "allow": [
